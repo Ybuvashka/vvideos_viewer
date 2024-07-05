@@ -32,7 +32,7 @@ class FileController {
       const parent = await File.findOne({ _id: req.body.parent })
 
       let path
-      if (!path) {
+      if (!parent) {
         path = `${process.env.FILE_PATH}\\${file.name}`
       } else {
         path = `${process.env.FILE_PATH}\\${parent.path}\\${file.name}`
