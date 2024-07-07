@@ -10,7 +10,7 @@ dotenv.config();
 const port = process.env.PORT || 8000;
 
 //routers
-const fileRouter = require("./routes/fileRouter.js");
+const fileRouter = require("./routes/file.routes.js");
 
 app.use(fileUpload({}));
 app.use(express.json());

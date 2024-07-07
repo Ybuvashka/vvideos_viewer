@@ -1,6 +1,6 @@
 const fs = require('fs')
-const fileService = require('../services/fileService.js')
-const File = require('../models/File.js')
+const fileService = require('../services/file.services.js')
+const File = require('../models/file.model.js')
 
 class FileController {
   async createDir(req, res) {
