@@ -1,7 +1,7 @@
-const {ObjectId, Schema, model} = require('mongoose')
+const { ObjectId, Schema, model } = require("mongoose");
 
 const FileSchema = new Schema({
-  name: { type: String, require: true,trim:true },
+  name: { type: String, require: true, trim: true },
   type: { type: String, require: true },
   path: { type: String },
   date: {
@@ -11,15 +11,20 @@ const FileSchema = new Schema({
   parent: [
     {
       type: ObjectId,
-      ref: 'File',
+      ref: "File",
     },
   ],
   childs: [
     {
       type: ObjectId,
-      ref: 'File',
+      ref: "File",
     },
   ],
-})
 
-module.exports = model('File', FileSchema)
+  cover: {
+    type: Schema.ObjectId,
+    ref: "Cover",
+  },
+});
+
+module.exports = model("File", FileSchema);

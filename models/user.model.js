@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
-const crypto = require('crypto')
-// const path = require('fs')
+const crypto = require('crypto');
+const { USER_ROLE } = require("../utils/constants");
 
 const UserSchema = new Schema({
   name: {
@@ -20,6 +20,11 @@ const UserSchema = new Schema({
     required: true,
   },
   salt: String,
+  role:{
+    type: String,
+    enum: Object.values(USER_ROLE),
+    default:USER_ROLE.USER
+  },
   created: {
     type: Date,
     default: Date.now(),

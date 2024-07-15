@@ -10,13 +10,13 @@ class AuthController {
       })
 
       if (!user) {
-        return res.status('401').json({ error: 'user not found' })
+        return res.status(401).json({ error: 'user not found' })
       }
 
       if (!user.authenticate(req.body.password)) {
         return res
-          .status('401')
-          .send({ error: 'password and email dont match' })
+          .status(401)
+          .send({ error: 'password and email don`t match' })
       }
 
       const token = jwt.sign(
@@ -25,9 +25,9 @@ class AuthController {
         },
         process.env.JWT_SECRET
       )
-
+      const oneDay = 1000 * 60 * 60 * 24;
       res.cookie('t', token, {
-        expire: new Date() + 9999,
+        expire: new Date(Date.now() + oneDay),
       })
 
       return res.json({
@@ -35,13 +35,13 @@ class AuthController {
         user: { _id: user._id, name: user.name, email: user.email },
       })
     } catch (err) {
-      return res.status('401').json({ err: 'could not sign in' })
+      return res.status(401).json({ err: 'could not sign in' })
     }
   }
 
   async signout(req, res) {
     res.clearCookie('t')
-    return res.status('200').json({ message: 'signed out' })
+    return res.status(200).json({ message: 'signed out' })
   }
 
   async requireSignin() {
