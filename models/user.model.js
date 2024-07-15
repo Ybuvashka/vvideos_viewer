@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const crypto = require('crypto')
+// const path = require('fs')
 
 const UserSchema = new Schema({
   name: {
@@ -35,13 +36,13 @@ UserSchema.virtual("password")
     return this._password;
   });
 
-UserSchema.path("hashed password").validate(function () {
+UserSchema.path("hashed_password").validate(function () {
   if (this._password && this._password.length < 6) {
     this.invalidate("password", "Password must be at least 6 characters.");
   }
-  if (this.isNew && !this._password) {
-    this.invalidate("password", "Password is required");
-  }
+  // if (this.isNew && !this._password) {
+  //   this.invalidate("password", "Password is required ");
+  // }
 }, null);
 
 UserSchema.methods = {

@@ -11,10 +11,12 @@ const port = process.env.PORT || 8000;
 
 //routers
 const fileRouter = require("./routes/file.routes.js");
+const userRouter = require('./routes/user.routes.js')
 
 app.use(fileUpload({}));
 app.use(express.json());
 app.use("/api/files", fileRouter);
+app.use('/api/users', userRouter)
 
 const start = async () => {
   try {
