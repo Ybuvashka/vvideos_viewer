@@ -1,6 +1,6 @@
-const { ObjectId, Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const FileSchema = new Schema({
+const FileSchema = new mongoose.Schema({
   name: { type: String, require: true, trim: true },
   type: { type: String, require: true },
   path: { type: String },
@@ -20,11 +20,10 @@ const FileSchema = new Schema({
       ref: "File",
     },
   ],
-
   cover: {
-    type: Schema.ObjectId,
+    type: mongoose.Types.ObjectId,
     ref: "Cover",
   },
 });
 
-module.exports = model("File", FileSchema);
+module.exports = mongoose.model("File", FileSchema);

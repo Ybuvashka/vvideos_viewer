@@ -3,37 +3,38 @@ const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 
 class AuthController {
+
+  async register(){
+    const user = await User.create(req.body)
+    res.status(201).json({user})
+  }
+
   async signin(req, res) {
     try {
-      let user = await User.findOne({
-        email: req.body.email,
-      })
+      let user = await User.findOne({ email: req.body.email });
 
       if (!user) {
-        return res.status(401).json({ error: 'user not found' })
+        return res.status(401).json({ error: 'User not found' });
       }
 
       if (!user.authenticate(req.body.password)) {
-        return res
-          .status(401)
-          .send({ error: 'password and email don`t match' })
+        return res.status(401).send({ error: 'Password and email don\'t match' });
       }
 
-      const token = jwt.sign(
-        {
-          _id: user._id,
-        },
-        process.env.JWT_SECRET
-      )
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
       const oneDay = 1000 * 60 * 60 * 24;
+
       res.cookie('t', token, {
-        expire: new Date(Date.now() + oneDay),
-      })
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        expires: new Date(Date.now() + oneDay)
+      });
 
       return res.json({
         token,
         user: { _id: user._id, name: user.name, email: user.email },
-      })
+      });
     } catch (err) {
       return res.status(401).json({ err: 'could not sign in' })
     }
