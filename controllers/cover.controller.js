@@ -2,7 +2,8 @@ const Cover = require('../models/cover.model')
 
 class CoverController {
     async createCover(req,res){
-
+        console.log(req)
+        req.body.createdBy = req.body.user._id
         const cover = new Cover(req.body)
 
         try{
@@ -14,3 +15,5 @@ class CoverController {
         }
     }
 }
+
+module.exports = new CoverController()

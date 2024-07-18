@@ -3,6 +3,12 @@ const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 
 class AuthController {
+
+  async register(){
+    const user = await User.create(req.body)
+    res.status(201).json({msg:'user was created'})
+  }
+
   async signin(req, res) {
     try {
       let user = await User.findOne({

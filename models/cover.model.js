@@ -1,7 +1,7 @@
-const { Schema } = require("mongoose");
+const mongoose = require("mongoose");
 const { TYPE_VIDEO, GENRE_VIDEO } = require("../utils/constants");
 
-const CoverSchema = new Schema({
+const CoverSchema = new mongoose.Schema({
   name: {
     type: String,
     require: true,
@@ -15,16 +15,16 @@ const CoverSchema = new Schema({
   genre: {
     type: String,
     require: true,
-    enum: Object.value(GENRE_VIDEO),
+    enum: Object.values(GENRE_VIDEO),
   },
   description: {
     type: String,
     require: true,
   },
-  user: {
-    type: Schema.ObjectId,
+  createdBy: {
+    type: mongoose.Types.ObjectId,
     ref: "User",
   },
 });
 
-module.exports = model("Cover", CoverSchema);
+module.exports = mongoose.model("Cover", CoverSchema);

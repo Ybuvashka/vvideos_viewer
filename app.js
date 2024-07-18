@@ -13,12 +13,14 @@ const port = process.env.PORT || 8000
 const fileRouter = require('./routes/file.routes.js')
 const userRouter = require('./routes/user.routes.js')
 const authRouter = require('./routes/auth.routes.js')
+const coverRouter = require('./routes/cover.routes.js')
 
 app.use(fileUpload({}))
 app.use(express.json())
 app.use('/api/files', fileRouter)
 app.use('/api/users', userRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/covers',coverRouter)
 
 const start = async () => {
   try {
