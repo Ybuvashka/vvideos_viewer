@@ -2,6 +2,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 const fileUpload = require('express-fileupload')
+const cookieParser = require('cookie-parser')
 const fs = require('fs')
 
 const app = express()
@@ -15,12 +16,18 @@ const userRouter = require('./routes/user.routes.js')
 const authRouter = require('./routes/auth.routes.js')
 const coverRouter = require('./routes/cover.routes.js')
 
+//middlewares
+const authenticateUser = require('./middleware/auth.middleware.js')
+
 app.use(fileUpload({}))
 app.use(express.json())
+app.use(cookieParser())
+
+
 app.use('/api/files', fileRouter)
-app.use('/api/users', userRouter)
+app.use('/api/covers',authenticateUser,coverRouter)
+app.use('/api/users',authenticateUser, userRouter)
 app.use('/api/auth', authRouter)
-app.use('/api/covers',coverRouter)
 
 const start = async () => {
   try {

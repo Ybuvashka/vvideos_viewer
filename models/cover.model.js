@@ -25,6 +25,10 @@ const CoverSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "User",
   },
+  created: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 module.exports = mongoose.model("Cover", CoverSchema);
