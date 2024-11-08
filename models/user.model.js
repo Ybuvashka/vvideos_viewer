@@ -1,35 +1,34 @@
 const { Schema, model } = require("mongoose");
-const crypto = require('crypto');
+const crypto = require("crypto");
 const { USER_ROLE } = require("../utils/constants");
 
-const UserSchema = new Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: "Name is required",
+const UserSchema = new Schema(
+  {
+    name: {
+      type: String,
+      trim: true,
+      required: "Name is required",
+    },
+    email: {
+      type: String,
+      trim: true,
+      unique: "Email already exists",
+      required: "Email is required",
+      match: [/.+\@.+\..+/, "Please fill a valid email address"],
+    },
+    hashed_password: {
+      type: String,
+      required: true,
+    },
+    salt: String,
+    role: {
+      type: String,
+      enum: Object.values(USER_ROLE),
+      default: USER_ROLE.USER,
+    },
   },
-  email: {
-    type: String,
-    trim: true,
-    unique: "Email already exists",
-    required: "Email is required",
-    match: [/.+\@.+\..+/, "Please fill a valid email address"],
-  },
-  hashed_password: {
-    type: String,
-    required: true,
-  },
-  salt: String,
-  role:{
-    type: String,
-    enum: Object.values(USER_ROLE),
-    default:USER_ROLE.USER
-  },
-  created: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+  { timestamps: true }
+);
 
 UserSchema.virtual("password")
   .set(function (password) {
@@ -66,9 +65,9 @@ UserSchema.methods = {
       return "";
     }
   },
-  makeSalt:function(){
-    return Math.round((new Date().valueOf() * Math.random())) + ''
-  }
+  makeSalt: function () {
+    return Math.round(new Date().valueOf() * Math.random()) + "";
+  },
 };
 
-module.exports = model('User', UserSchema)
+module.exports = model("User", UserSchema);

@@ -5,7 +5,8 @@ const USER_ROLE = {
 
 const TYPE_VIDEO = {
   MOVIE: "movie",
-  SERIES: "series",
+  TV: "TV",
+  OVA: 'OVA'
 };
 
 const GENRE_VIDEO = {

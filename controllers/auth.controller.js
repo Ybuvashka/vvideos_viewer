@@ -4,7 +4,7 @@ const expressJwt = require('express-jwt')
 
 class AuthController {
 
-  async register(){
+  async register(req,res){
     const user = await User.create(req.body)
     res.status(201).json({user})
   }
@@ -18,7 +18,7 @@ class AuthController {
       }
 
       if (!user.authenticate(req.body.password)) {
-        return res.status(401).send({ error: 'Password and email don\'t match' });
+        return res.status(401).send({ error: 'Password and email do not match' });
       }
 
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });

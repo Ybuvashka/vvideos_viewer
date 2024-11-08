@@ -1,65 +1,59 @@
-const fs = require('fs')
-const fileService = require('../services/file.services.js')
-const File = require('../models/file.model.js')
+const fs = require("fs");
+const File = require("../models/file.model.js");
 
 class FileController {
-  async createDir(req, res) {
-    try {
-      const { name, type,parent } = req.body
-      const file = new File({ name, type ,parent})
-      const parentFile = await File.findOne({_id: parent})
-      if (!parentFile) {
-        file.path = name
-        await fileService.createDir(file)
-      } else {
-        file.path = `${parentFile.path}\\${file.name}`
-        await fileService.createDir(file)
-        parentFile.childs.push(file._id)
-        await parentFile.save()
-      }
-
-      await file.save()
-      return res.json(file)
-    } catch (error) {
-      console.log(error)
-      res.status(400).json(error)
-    }
-  }
-
   async uploadFile(req, res) {
-    try {
-      const file = req.files.file
-      const parent = await File.findOne({ _id: req.body.parent })
+    console.log("file upload start");
 
-      let path
-      if (!parent) {
-        path = `${process.env.FILE_PATH}\\${file.name}`
-      } else {
-        path = `${process.env.FILE_PATH}\\${parent.path}\\${file.name}`
+    const { _id, files } = req;
+    console.log(_id);
+    
+    const filePath = `${process.env.FILE_PATH}\\${_id}`;
+    const returnPaths = [];
+  
+    try {
+      if (!fs.existsSync(filePath)) {
+        fs.mkdirSync(filePath);
       }
 
-      if (fs.existsSync(path))
-        return res.status(400).json({ message: 'file already exist' })
-      file.mv(path)
 
-      const type = file.name.split('.').pop()
-      let filePath = file.name
-      if (parent) filePath = parent.path + '\\' + file.name
 
-      const dbFile = new File({
-        name: file.name,
-        type,
-        path: filePath,
-        parent: parent?._id,
-      })
+      for (const file of files) {
+        const uploadFilePath = `${filePath}\\${file.name}`;
 
-      await dbFile.save()
-      res.json(dbFile)
+        if (fs.existsSync(uploadFilePath)) {
+          return res.status(400).json({ message: "File already exists" });
+        }
+
+        // Переміщуємо файл
+        await new Promise((resolve, reject) => {
+          file.mv(uploadFilePath, (err) => {
+            if (err) reject(err);
+            resolve();
+          });
+        });
+
+        // Створюємо запис в БД
+        const dbFile = new File({
+          name: file.name,
+          path: uploadFilePath,
+        });
+
+        returnPaths.push(uploadFilePath);
+
+        await dbFile.save();
+      }
+
+      console.log("file upload end");
+
+      res
+        .status(200)
+        .json({ message: "Files uploaded successfully", paths: returnPaths });
     } catch (error) {
-      log(error)
-      res.status(400).json({ message: 'upload error' })
+      console.error(error);
+      res.status(400).json({ message: "Upload error" });
     }
   }
 }
 
-module.exports = new FileController()
+module.exports = new FileController();

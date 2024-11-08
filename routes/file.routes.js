@@ -3,8 +3,7 @@ const router = new Router()
 const fileController = require('../controllers/file.controller')
 
 
-router.post('',fileController.createDir)
-router.post('/upload',fileController.uploadFile)
+router.post('/',fileController.uploadFile)
 
 
 module.exports = router

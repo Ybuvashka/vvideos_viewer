@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *,
 ::after,
 ::before {
@@ -9,20 +13,104 @@
 html {
   font-size: 100%;
 }
-:root {
-  --primary-text-color: #ffffff;
-  --second-text-color: #EEEEEE;
 
+p {
+  margin: 0;
+  @apply text-base mt-2
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: capitalize;
+  letter-spacing: var(--letter-spacing);
+}
 
-  --primary-bg-color: #333;
-  --second-bg-color: #222222;
+h1 {
+  font-size: clamp(2rem, 5vw, 5rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+h4 {
+  font-size: clamp(1rem, 2vw, 2rem);
+}
+
+h5 {
+  font-size: clamp(0.875rem, 1.5vw, 1.5rem);
+}
+
+a {
+  text-decoration: none;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+a {
+  color: inherit;
+}
+
+.truncate-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Кількість рядків */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swiper-button-prev, .swiper-button-next{
+  color: white;
+  display: none;
+}
+.carousel-wrapper:hover .swiper-button-next, 
+.carousel-wrapper:hover .swiper-button-prev {
+  display: block;
 }
 
 body {
-  background: var(--primary-bg-color);
-  color: var(--primary-text-color);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  font-weight: 400;
-  line-height: 1;
+  @apply bg-gray-primary text-white-primary font-sans font-normal leading-normal max-w-custom px-2 mx-auto;
+}
+
+@layer utilities {
+  .header {
+    @apply flex justify-between items-center;
+  }
+
+  .header-list {
+    @apply flex items-center;
+  }
+
+  .header-list_item {
+    @apply px-3 py-4 transition-all ease-in-out delay-75 hover:bg-red-default;
+  }
+
+  .btn {
+    @apply px-6 py-4 transition-all ease-in-out delay-75 bg-gray-secondary;
+  }
+
+  .error-wrapper {
+    @apply min-h-screen text-center flex flex-col items-center justify-center bg-white-primary text-gray-primary;
+  }
+
+  .visible-false ::after ::before {
+    @apply text-white-primary hidden;
+  }
 }
